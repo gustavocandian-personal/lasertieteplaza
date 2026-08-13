@@ -40,6 +40,16 @@
       f.parentNode.insertBefore(j, f);
     })(window, document, 'script', C.gtmId);
   }
+  /* Microsoft Clarity (heatmap + gravação). Snippet oficial, com o id vindo
+     do config. As tags lp/area permitem filtrar heatmap por página e por
+     grupo de anúncio (?a=).                                                */
+  if (C.clarityId) {
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', C.clarityId);
+  }
   if (C.googleAds && C.googleAds.id) {
     var g = document.createElement('script');
     g.async = true;
@@ -87,6 +97,14 @@
   var origemPagina  = document.body.getAttribute('data-origem') || 'página do site';
   var detalhePadrao = document.body.getAttribute('data-detalhe') || 'quero agendar uma avaliação';
 
+  var lp = document.body.getAttribute('data-lp') || 'a';
+
+  /* Tags no Clarity: filtram heatmap/gravações por página e grupo de anúncio */
+  if (typeof window.clarity === 'function') {
+    window.clarity('set', 'lp', lp);
+    window.clarity('set', 'area', area || 'geral');
+  }
+
   /* --- 4. Links de WhatsApp ---------------------------------------------- */
   var origem = '';
   if (C.incluirOrigemNaMensagem) {
@@ -110,8 +128,6 @@
     el.rel = 'noopener';
   }
 
-  var lp = document.body.getAttribute('data-lp') || 'a';
-
   document.querySelectorAll('[data-zap]').forEach(function (el) {
     montaLink(el);
 
@@ -125,6 +141,12 @@
         posicao: el.getAttribute('data-zap-pos') || 'corpo', // hero, fixo, secao...
         pagina: window.location.pathname
       });
+
+      /* No Clarity o clique vira evento — aparece nos filtros e marca a
+         gravação da sessão no momento exato do clique                      */
+      if (typeof window.clarity === 'function') {
+        window.clarity('event', 'whatsapp_click');
+      }
 
       if (typeof window.gtag === 'function' && C.googleAds && C.googleAds.id && C.googleAds.conversionLabel) {
         gtag('event', 'conversion', {

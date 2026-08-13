@@ -69,6 +69,11 @@ window.LASERCO = {
      comparação, que é justamente o motivo de existirem duas.                */
   gtmId: '',
 
+  /* Microsoft Clarity (heatmap + gravação de sessão). Vazio = desligado.
+     As páginas marcam tags "lp" e "area" — dá pra filtrar os heatmaps por
+     página e por grupo de anúncio, e o clique no WhatsApp vira evento.      */
+  clarityId: 'y1jxnl8vd5',
+
   /* Opcional: conversão direta do Google Ads, sem GTM.
      Preencha os dois para disparar gtag no clique do WhatsApp.              */
   googleAds: {
