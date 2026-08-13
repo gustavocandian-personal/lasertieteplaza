@@ -1,0 +1,615 @@
+/* ============================================================================
+   Laser & Co — Landing pages (Google Ads)
+   Paleta e tipografia extraídas de lasercompany.com para não parecer outra marca.
+   Mobile-first: tudo abaixo é mobile; media queries só ampliam.
+   ========================================================================== */
+
+:root {
+  --tinta:        #35100F;  /* marrom-vinho da marca — barras, botões, títulos */
+  --tinta-suave:  #5A2A28;
+  --creme:        #FAF8F5;  /* fundo padrão */
+  --areia:        #F1E7DF;  /* fundo de seção alternada */
+  --linha:        #E7E1D8;  /* bordas */
+  --taupe:        #9C917F;  /* texto secundário / eyebrows */
+  --taupe-claro:  #C9B8AD;
+  --texto:        #1C1614;
+  --zap:          #25D366;
+  --zap-escuro:   #128C7E;
+
+  --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --raio: 4px;
+  --largura: 1080px;
+  --barra-fixa: 76px; /* altura do CTA fixo no mobile */
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--texto);
+  background: var(--creme);
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: var(--barra-fixa); /* espaço pro CTA fixo */
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.12;
+  color: var(--tinta);
+  margin: 0 0 .5em;
+  letter-spacing: -0.01em;
+}
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.85rem; }
+h3 { font-size: 1.25rem; }
+p  { margin: 0 0 1em; }
+
+em { font-style: italic; }
+
+a { color: var(--tinta); }
+
+.wrap {
+  width: 100%;
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.eyebrow {
+  font-family: var(--sans);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin: 0 0 .75rem;
+}
+
+/* --- Barra de aviso topo -------------------------------------------------- */
+.topbar {
+  background: var(--tinta);
+  color: #fff;
+  text-align: center;
+  font-size: .78rem;
+  letter-spacing: .02em;
+  padding: 9px 16px;
+}
+.topbar strong { font-weight: 600; }
+
+/* --- Header --------------------------------------------------------------- */
+/* Header NÃO é sticky: numa LP quem precisa acompanhar a rolagem é a barra de
+   âncoras (e o CTA fixo do rodapé). Header grudado só rouba altura útil. */
+.header {
+  background: var(--creme);
+  border-bottom: 1px solid var(--linha);
+  padding: 14px 0;
+}
+.header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.logo { text-decoration: none; display: block; line-height: 1; }
+.logo-nome {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--tinta);
+}
+.logo-sub {
+  display: block;
+  font-size: .55rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-top: 3px;
+}
+/* No mobile o CTA fixo do rodapé já cobre — aqui só rouba espaço acima da dobra */
+.header .header-zap { display: none; }
+
+/* --- Botões --------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--sans);
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 16px 26px;
+  border-radius: var(--raio);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease, transform .1s ease;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-zap {
+  background: var(--zap);
+  color: #fff;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(18,140,126,.22);
+}
+.btn-zap:hover { background: var(--zap-escuro); }
+
+.btn-tinta {
+  background: var(--tinta);
+  color: #fff;
+}
+.btn-tinta:hover { background: var(--tinta-suave); }
+
+.btn-linha {
+  background: transparent;
+  color: var(--tinta);
+  border-color: var(--tinta);
+}
+.btn-linha:hover { background: var(--tinta); color: #fff; }
+
+.btn svg { flex: 0 0 auto; }
+
+/* --- Hero ----------------------------------------------------------------- */
+.hero {
+  background: var(--areia);
+  border-bottom: 1px solid var(--linha);
+  overflow: hidden;
+}
+.hero .wrap {
+  display: grid;
+  gap: 28px;
+  padding-top: 34px;
+  padding-bottom: 34px;
+}
+.hero h1 { font-size: 2.4rem; margin-bottom: .35em; }
+.hero h1 em { color: var(--tinta-suave); }
+.hero-sub {
+  font-size: 1.05rem;
+  color: #40332F;
+  margin-bottom: 1.4rem;
+  max-width: 46ch;
+}
+
+/* Card de oferta — preço acima da dobra (regra 1 do doc de mídia) */
+.oferta {
+  background: #fff;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 3px rgba(53,16,15,.05);
+}
+.oferta-titulo {
+  font-family: var(--sans);
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 10px;
+}
+.oferta-de {
+  font-size: .9rem;
+  color: var(--taupe);
+  text-decoration: line-through;
+  margin-bottom: 2px;
+}
+.oferta-prefixo {
+  font-size: .88rem;
+  color: var(--taupe);
+  margin-bottom: 2px;
+}
+/* Cormorant usa algarismos antigos por padrão — em preço isso atrapalha a leitura */
+.oferta-por, .card-preco, .area-preco {
+  font-variant-numeric: lining-nums;
+  font-feature-settings: 'lnum' 1;
+}
+
+.oferta-por {
+  font-family: var(--serif);
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: var(--tinta);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.oferta-por small {
+  font-family: var(--sans);
+  font-size: .8rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--taupe);
+  display: block;
+  margin-top: 6px;
+  text-transform: none;
+}
+.oferta p:last-of-type { margin-bottom: 0; }
+.oferta-selo {
+  display: inline-block;
+  margin-top: 16px;
+  background: var(--areia);
+  color: var(--tinta);
+  font-size: .78rem;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 100px;
+}
+
+/* Chips de prova rápida */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 0;
+  list-style: none;
+}
+.chips li {
+  font-size: .78rem;
+  color: var(--tinta);
+  background: rgba(255,255,255,.7);
+  border: 1px solid var(--linha);
+  border-radius: 100px;
+  padding: 6px 12px;
+}
+
+/* --- Imagem (placeholder trocável) ---------------------------------------
+   Para usar foto real: .hero-img { background-image: url('img/hero.jpg'); }
+   e remova o ::after do monograma.                                          */
+.figura {
+  position: relative;
+  border-radius: var(--raio);
+  overflow: hidden;
+  background: linear-gradient(150deg, #E9DDD4 0%, #D8C7BC 55%, #C9B8AD 100%);
+  background-size: cover;
+  background-position: center;
+  min-height: 260px;
+  border: 1px solid var(--linha);
+}
+.figura::after {
+  content: '& Co.';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 4rem;
+  color: rgba(53,16,15,.14);
+  letter-spacing: .02em;
+}
+.figura[style*="url"]::after { content: none; } /* some quando há foto real */
+.figura-alta { min-height: 340px; }
+
+/* --- Barra de âncoras por área -------------------------------------------- */
+.ancoras {
+  background: rgba(250,248,245,.97);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--linha);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.ancoras ul {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 10px 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.ancoras ul::-webkit-scrollbar { display: none; }
+.ancoras a {
+  display: block;
+  white-space: nowrap;
+  font-size: .8rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--tinta);
+  border: 1px solid var(--linha);
+  border-radius: 100px;
+  padding: 7px 14px;
+  background: #fff;
+}
+.ancoras a:hover, .ancoras a.ativo {
+  background: var(--tinta);
+  color: #fff;
+  border-color: var(--tinta);
+}
+
+/* --- Seções --------------------------------------------------------------- */
+.secao { padding: 44px 0; }
+.secao-areia { background: var(--areia); }
+.secao-tinta { background: var(--tinta); color: #fff; }
+.secao-tinta h2, .secao-tinta h3 { color: #fff; }
+.secao-tinta .eyebrow { color: var(--taupe-claro); }
+
+.secao-titulo { margin-bottom: 1.5rem; }
+.secao-titulo p { color: #4A3B36; max-width: 58ch; margin-bottom: 0; }
+
+/* Ancoragem sob a barra de âncoras grudada */
+[id] { scroll-margin-top: 70px; }
+
+/* --- Grid de cards -------------------------------------------------------- */
+.grid { display: grid; gap: 16px; }
+.grid-2 { grid-template-columns: 1fr; }
+.grid-3 { grid-template-columns: 1fr; }
+
+.card {
+  background: #fff;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  padding: 22px;
+}
+.card h3 { margin-bottom: .4em; }
+.card p:last-child { margin-bottom: 0; }
+.card-preco {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  color: var(--tinta);
+  display: block;
+  margin: 10px 0 4px;
+}
+.card-nota { font-size: .82rem; color: var(--taupe); }
+.card .btn { margin-top: 16px; width: 100%; }
+
+/* Área (seções ancoradas da LP A) */
+.area {
+  border-top: 1px solid var(--linha);
+  padding: 32px 0;
+}
+.area:first-of-type { border-top: 0; }
+/* No mobile título e preço empilham — lado a lado eles brigam por atenção */
+.area-topo { margin-bottom: 14px; }
+.area-topo h3 { margin-bottom: .15em; }
+.area-preco {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  color: var(--tinta);
+}
+.area ul { margin: 0 0 18px; padding-left: 18px; color: #4A3B36; }
+.area ul li { margin-bottom: 6px; }
+.area .btn { width: 100%; }
+.area .figura { min-height: 200px; margin-top: 20px; }
+
+/* --- Passos --------------------------------------------------------------- */
+.passos { counter-reset: p; list-style: none; margin: 0; padding: 0; }
+.passos li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 52px;
+  margin-bottom: 22px;
+}
+.passos li::before {
+  content: counter(p);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--tinta);
+  color: #fff;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+}
+.secao-tinta .passos li::before { background: #fff; color: var(--tinta); }
+.passos h3 { margin-bottom: .2em; font-size: 1.1rem; }
+.passos p { margin-bottom: 0; color: #4A3B36; }
+.secao-tinta .passos p { color: rgba(255,255,255,.82); }
+
+/* --- Depoimentos ---------------------------------------------------------- */
+.depo {
+  background: #fff;
+  border: 1px solid var(--linha);
+  border-left: 3px solid var(--taupe-claro);
+  border-radius: var(--raio);
+  padding: 20px;
+}
+.depo p {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  line-height: 1.45;
+  color: var(--tinta);
+  margin-bottom: 10px;
+}
+.depo cite {
+  font-style: normal;
+  font-size: .8rem;
+  color: var(--taupe);
+  letter-spacing: .04em;
+}
+
+/* --- FAQ ------------------------------------------------------------------ */
+.faq details {
+  border-bottom: 1px solid var(--linha);
+  padding: 16px 0;
+}
+.faq summary {
+  font-weight: 600;
+  color: var(--tinta);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  font-size: 1rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: '+';
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  color: var(--taupe);
+  line-height: 1;
+  flex: 0 0 auto;
+}
+.faq details[open] summary::after { content: '–'; }
+.faq details p { margin: 12px 0 0; color: #4A3B36; }
+
+/* --- Local ---------------------------------------------------------------- */
+.local-dados { list-style: none; margin: 0 0 20px; padding: 0; }
+.local-dados li {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,.14);
+  display: grid;
+  gap: 2px;
+}
+.local-dados strong {
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--taupe-claro);
+  font-weight: 600;
+}
+.local-grid .btn { width: 100%; }
+.local-grid .figura { margin-top: 24px; }
+
+/* Mapa embutido — carrega em lazy pra não pesar na abertura da página */
+.mapa {
+  margin-top: 24px;
+  border-radius: var(--raio);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.18);
+  background: var(--taupe-claro);
+  line-height: 0;
+}
+.mapa iframe {
+  display: block;
+  width: 100%;
+  height: 260px;
+  border: 0;
+}
+
+/* --- CTA final ------------------------------------------------------------ */
+.cta-final { text-align: center; }
+.cta-final h2 { font-size: 2rem; }
+.cta-final p { max-width: 44ch; margin-left: auto; margin-right: auto; }
+.cta-final .btn { max-width: 420px; margin: 8px auto 0; }
+
+/* --- Rodapé --------------------------------------------------------------- */
+.rodape {
+  background: var(--creme);
+  border-top: 1px solid var(--linha);
+  padding: 30px 0 34px;
+  font-size: .78rem;
+  color: var(--taupe);
+}
+.rodape p { margin-bottom: .7em; }
+.rodape a { color: var(--taupe); }
+
+/* --- CTA fixo -------------------------------------------------------------
+   ~90% do tráfego é mobile: o botão acompanha a rolagem a página inteira,
+   nunca some. No mobile é barra de largura total (área de toque máxima);
+   no desktop vira pílula flutuante no canto, pra não tampar o conteúdo.    */
+.fixo {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 50;
+  background: rgba(250,248,245,.96);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--linha);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+}
+.fixo .btn { width: 100%; padding: 15px 20px; }
+
+/* ============================================================================
+   Desktop
+   ========================================================================== */
+@media (min-width: 760px) {
+  h1 { font-size: 3.1rem; }
+  h2 { font-size: 2.3rem; }
+
+  body { padding-bottom: 0; }
+  .header .header-zap { display: inline-flex; }
+
+  /* Desktop: pílula flutuante no canto, não barra de largura total */
+  .fixo {
+    left: auto;
+    right: 24px;
+    bottom: 24px;
+    background: transparent;
+    backdrop-filter: none;
+    border-top: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  .fixo .btn {
+    width: auto;
+    padding: 16px 26px;
+    border-radius: 100px;
+    box-shadow: 0 6px 24px rgba(18,140,126,.34);
+  }
+
+  .hero .wrap {
+    grid-template-columns: 1.05fr .95fr;
+    align-items: center;
+    gap: 44px;
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+  .hero h1 { font-size: 3.2rem; }
+  .hero-sub { font-size: 1.12rem; }
+  .oferta { padding: 26px; }
+  .btn-zap { width: auto; }
+  .hero .btn-zap { width: 100%; max-width: 380px; }
+
+  .figura { min-height: 420px; }
+  .figura-alta { min-height: 480px; }
+
+  .ancoras ul { justify-content: center; padding: 12px 20px; }
+
+  .secao { padding: 70px 0; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .area { padding: 40px 0; }
+  .area-conteudo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+  .area-topo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .area-preco { white-space: nowrap; }
+  .area .btn { width: auto; }
+  .area .figura { min-height: 300px; margin-top: 0; }
+  .card .btn { width: auto; }
+
+  .faq { max-width: 780px; margin: 0 auto; }
+  .local-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .local-grid .btn { width: auto; }
+  .local-grid .figura { margin-top: 0; }
+  .mapa { margin-top: 0; }
+  .mapa iframe { height: 380px; }
+}
