@@ -50,14 +50,19 @@
       y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
     })(window, document, 'clarity', 'script', C.clarityId);
   }
-  if (C.googleAds && C.googleAds.id) {
+  /* gtag — GA4 e/ou Google Ads. O script carrega uma vez; cada id presente
+     ganha o seu `config` (é assim que GA4 e Ads convivem no mesmo gtag).   */
+  var gtagIds = [];
+  if (C.ga4Id) gtagIds.push(C.ga4Id);
+  if (C.googleAds && C.googleAds.id) gtagIds.push(C.googleAds.id);
+  if (gtagIds.length) {
     var g = document.createElement('script');
     g.async = true;
-    g.src = 'https://www.googletagmanager.com/gtag/js?id=' + C.googleAds.id;
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=' + gtagIds[0];
     document.head.appendChild(g);
     window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
     gtag('js', new Date());
-    gtag('config', C.googleAds.id);
+    gtagIds.forEach(function (id) { gtag('config', id); });
   }
 
   /* --- 2. Preenche textos do config -------------------------------------- */
@@ -146,6 +151,17 @@
          gravação da sessão no momento exato do clique                      */
       if (typeof window.clarity === 'function') {
         window.clarity('event', 'whatsapp_click');
+      }
+
+      /* No GA4 o clique vira evento com os mesmos parâmetros do dataLayer.
+         Marcado como evento-chave no GA4 + vínculo GA4↔Ads, ele é a
+         conversão da campanha (resolve o §5 sem depender do GTM).          */
+      if (typeof window.gtag === 'function' && C.ga4Id) {
+        gtag('event', 'whatsapp_click', {
+          lp: lp,
+          area: area || 'geral',
+          posicao: el.getAttribute('data-zap-pos') || 'corpo'
+        });
       }
 
       if (typeof window.gtag === 'function' && C.googleAds && C.googleAds.id && C.googleAds.conversionLabel) {

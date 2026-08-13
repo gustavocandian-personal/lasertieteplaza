@@ -74,6 +74,14 @@ window.LASERCO = {
      página e por grupo de anúncio, e o clique no WhatsApp vira evento.      */
   clarityId: 'y1jxnl8vd5',
 
+  /* Google Analytics 4 — ID de métricas ("G-XXXXXXXXXX").
+     Onde pegar: analytics.google.com → Administrador → Fluxos de dados.
+     ⚠️ PREENCHER — com o ID aqui, o gtag é injetado nas duas páginas e o
+     clique no WhatsApp vira o evento `whatsapp_click` no GA4 (com lp, area
+     e posicao). Marcando ele como evento-chave e vinculando GA4 ↔ Google
+     Ads, ele pode ser importado como conversão da campanha.                */
+  ga4Id: '',
+
   /* Opcional: conversão direta do Google Ads, sem GTM.
      Preencha os dois para disparar gtag no clique do WhatsApp.              */
   googleAds: {
