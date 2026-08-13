@@ -80,7 +80,7 @@ window.LASERCO = {
      clique no WhatsApp vira o evento `whatsapp_click` no GA4 (com lp, area
      e posicao). Marcando ele como evento-chave e vinculando GA4 ↔ Google
      Ads, ele pode ser importado como conversão da campanha.                */
-  ga4Id: '',
+  ga4Id: 'G-MHTJG3P4CH',
 
   /* Opcional: conversão direta do Google Ads, sem GTM.
      Preencha os dois para disparar gtag no clique do WhatsApp.              */
