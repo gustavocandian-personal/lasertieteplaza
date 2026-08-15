@@ -37,10 +37,12 @@ window.LASERCO = {
   ofertas: {
     virilha: {
       titulo: 'Virilha completa + perianal',
-      de: 'R$ 1.799,90',
+      de: 'R$ 2.519,80',
       prefixo: '',
-      por: '12x R$ 99,90',
-      selo: 'Perianal inclusa, sem pagar a mais'
+      por: '12x R$ 114,99',
+      /* "Presente surpresa" em vez de "perianal inclusa": decisão da Kizzy
+         (14/08) — gerar curiosidade em vez de entregar o brinde na LP.       */
+      selo: 'Ganhe um presente surpresa'
     },
     combo: {
       titulo: 'Virilha + axilas',
