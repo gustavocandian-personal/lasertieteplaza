@@ -54,7 +54,7 @@ window.LASERCO = {
     /* Preço confirmado pelo Gustavo em 17/08/2026. Antes daqui a LP B usava
        o combo acima como âncora, por não haver valor de clareamento.       */
     clareamento: {
-      titulo: 'Clareamento de virilha ou axila',
+      titulo: 'Clareamento de virilha + axilas',
       de: '',
       prefixo: 'a partir de',
       por: '12x R$ 119,90',
