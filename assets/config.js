@@ -51,13 +51,13 @@ window.LASERCO = {
       por: '12x R$ 104,99',
       selo: 'Ganhe 1 sessão de clareamento'
     },
-    /* ⚠️ PREENCHER — não existe preço de clareamento avulso no vault.
-       Enquanto não tiver, a LP B usa o combo acima como âncora.            */
+    /* Preço confirmado pelo Gustavo em 17/08/2026. Antes daqui a LP B usava
+       o combo acima como âncora, por não haver valor de clareamento.       */
     clareamento: {
       titulo: 'Clareamento de virilha ou axila',
       de: '',
       prefixo: 'a partir de',
-      por: '12x R$ 104,99',
+      por: '12x R$ 119,90',
       selo: '1ª sessão cortesia no combo com depilação'
     }
   },
