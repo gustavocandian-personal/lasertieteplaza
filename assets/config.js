@@ -71,10 +71,19 @@ window.LASERCO = {
      comparação, que é justamente o motivo de existirem duas.                */
   gtmId: '',
 
-  /* Microsoft Clarity (heatmap + gravação de sessão). Vazio = desligado.
-     As páginas marcam tags "lp" e "area" — dá pra filtrar os heatmaps por
-     página e por grupo de anúncio, e o clique no WhatsApp vira evento.      */
-  clarityId: 'y1jxnl8vd5',
+  /* PostHog — analytics + heatmap + gravação de sessão no mesmo painel.
+     Substituiu o Microsoft Clarity em 10/09/2026. Vazio = desligado.
+     Onde pegar: posthog.com → Settings → Project → Project API key
+     (começa com "phc_"; é chave pública, pode ficar no código do site).
+
+     As páginas registram "lp" e "area" como propriedade de TODO evento —
+     filtram heatmap, gravação e funil por página e por grupo de anúncio
+     (?a=) — e o clique no WhatsApp vira o evento `whatsapp_click`.
+     Projeto: "Default project" (id 602595), org Solaraphi.                 */
+  posthog: {
+    key:  'phc_BnJkP3esE3fu8RHsn3RHyHYp6bgmiithxz58SJzf9tiH',
+    host: 'https://us.i.posthog.com'   /* us.i… ou eu.i… conforme a região */
+  },
 
   /* Google Analytics 4 — ID de métricas ("G-XXXXXXXXXX").
      Onde pegar: analytics.google.com → Administrador → Fluxos de dados.

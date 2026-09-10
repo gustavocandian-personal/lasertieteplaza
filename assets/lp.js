@@ -29,7 +29,28 @@
     'clareamento-axila':   { h1: 'Clareamento de <em>axilas</em>',  detalhe: 'quero agendar o clareamento de axilas' }
   };
 
-  /* --- 1. GTM ------------------------------------------------------------ */
+  /* --- 1. Contexto da página: lp + area -----------------------------------
+     Resolvido ANTES do tracking, de propósito. `lp` e `area` são
+     registrados como propriedade de TODO evento do PostHog — inclusive do
+     $pageview. Se fossem calculados depois do init, o pageview sairia sem
+     eles: justo a métrica mais usada ficaria de fora da comparação
+     LP A x LP B, que é o motivo de existirem duas páginas.                 */
+  var area = (params.get('a') || '').toLowerCase();
+  var variacao = Object.prototype.hasOwnProperty.call(VARIACOES, area) ? VARIACOES[area] : null;
+  var h1 = document.querySelector('[data-h1]');
+
+  if (variacao && h1) h1.innerHTML = variacao.h1;
+  if (!variacao) area = h1 ? (h1.getAttribute('data-area-padrao') || 'geral') : 'geral';
+
+  var lp = document.body.getAttribute('data-lp') || 'a';
+
+  /* De onde o cliente veio — abre TODA mensagem, inclusive as dos botões
+     de seção. É o que diz ao atendimento se o lead é de depilação ou de
+     clareamento antes mesmo de ele responder.                              */
+  var origemPagina  = document.body.getAttribute('data-origem') || 'página do site';
+  var detalhePadrao = document.body.getAttribute('data-detalhe') || 'quero agendar uma avaliação';
+
+  /* --- 2. GTM ------------------------------------------------------------ */
   window.dataLayer = window.dataLayer || [];
   if (C.gtmId) {
     (function (w, d, s, i) {
@@ -40,18 +61,35 @@
       f.parentNode.insertBefore(j, f);
     })(window, document, 'script', C.gtmId);
   }
-  /* Microsoft Clarity (heatmap + gravação). Snippet oficial, com o id vindo
-     do config. As tags lp/area permitem filtrar heatmap por página e por
-     grupo de anúncio (?a=).                                                */
-  if (C.clarityId) {
-    (function (c, l, a, r, i, t, y) {
-      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
-      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-    })(window, document, 'clarity', 'script', C.clarityId);
+
+  /* --- 3. PostHog ---------------------------------------------------------
+     Analytics + heatmap + gravação de sessão no mesmo painel. Substituiu o
+     Microsoft Clarity em 10/09/2026. Snippet oficial: carrega o array.js em
+     async e enfileira o que for chamado antes de ele chegar — por isso dá
+     pra chamar register/capture na linha seguinte sem esperar nada.        */
+  if (C.posthog && C.posthog.key) {
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p||((p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",p.onerror=function(){p=null},(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r));var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],Object.defineProperty(u,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e}}),Object.defineProperty(u.people,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(){return u.toString(1)+".people (stub)"}}),o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+
+    window.posthog.init(C.posthog.key, {
+      api_host: C.posthog.host || 'https://us.i.posthog.com',
+      defaults: '2026-05-30',
+      /* O $pageview sai na mão, logo abaixo, e não pelo init — é o que
+         garante que ele nasça depois do register, com lp e area.          */
+      capture_pageview: false,
+      /* LP de mídia paga não tem login: ninguém nunca é identificado.
+         Evento anônimo custa menos e basta pro web analytics.             */
+      person_profiles: 'identified_only'
+    });
+
+    /* Acompanham todos os eventos daqui pra frente: filtram heatmap,
+       gravação e funil por página (a|b) e por grupo de anúncio (?a=).     */
+    window.posthog.register({ lp: lp, area: area || 'geral' });
+    window.posthog.capture('$pageview');
   }
-  /* gtag — GA4 e/ou Google Ads. O script carrega uma vez; cada id presente
-     ganha o seu `config` (é assim que GA4 e Ads convivem no mesmo gtag).   */
+
+  /* --- 4. gtag — GA4 e/ou Google Ads -------------------------------------
+     O script carrega uma vez; cada id presente ganha o seu `config` (é
+     assim que GA4 e Ads convivem no mesmo gtag).                          */
   var gtagIds = [];
   if (C.ga4Id) gtagIds.push(C.ga4Id);
   if (C.googleAds && C.googleAds.id) gtagIds.push(C.googleAds.id);
@@ -65,7 +103,7 @@
     gtagIds.forEach(function (id) { gtag('config', id); });
   }
 
-  /* --- 2. Preenche textos do config -------------------------------------- */
+  /* --- 5. Preenche textos do config -------------------------------------- */
   function busca(caminho) {
     return caminho.split('.').reduce(function (o, k) {
       return (o && o[k] !== undefined) ? o[k] : null;
@@ -83,34 +121,12 @@
       return;
     }
     if (el.tagName === 'A') el.href = v;
-    /* iframe guarda a URL e só carrega perto da tela — ver §5 abaixo */
+    /* iframe guarda a URL e só carrega perto da tela — ver §7 abaixo */
     else if (el.tagName === 'IFRAME') el.setAttribute('data-src', v);
     else el.textContent = v;
   });
 
-  /* --- 3. Variação de H1 -------------------------------------------------- */
-  var area = (params.get('a') || '').toLowerCase();
-  var variacao = Object.prototype.hasOwnProperty.call(VARIACOES, area) ? VARIACOES[area] : null;
-  var h1 = document.querySelector('[data-h1]');
-
-  if (variacao && h1) h1.innerHTML = variacao.h1;
-  if (!variacao) area = h1 ? (h1.getAttribute('data-area-padrao') || 'geral') : 'geral';
-
-  /* De onde o cliente veio — abre TODA mensagem, inclusive as dos botões
-     de seção. É o que diz ao atendimento se o lead é de depilação ou de
-     clareamento antes mesmo de ele responder.                              */
-  var origemPagina  = document.body.getAttribute('data-origem') || 'página do site';
-  var detalhePadrao = document.body.getAttribute('data-detalhe') || 'quero agendar uma avaliação';
-
-  var lp = document.body.getAttribute('data-lp') || 'a';
-
-  /* Tags no Clarity: filtram heatmap/gravações por página e grupo de anúncio */
-  if (typeof window.clarity === 'function') {
-    window.clarity('set', 'lp', lp);
-    window.clarity('set', 'area', area || 'geral');
-  }
-
-  /* --- 4. Links de WhatsApp ---------------------------------------------- */
+  /* --- 6. Links de WhatsApp ---------------------------------------------- */
   var origem = '';
   if (C.incluirOrigemNaMensagem) {
     var g_ = params.get('gclid'), u_ = params.get('utm_source');
@@ -147,10 +163,14 @@
         pagina: window.location.pathname
       });
 
-      /* No Clarity o clique vira evento — aparece nos filtros e marca a
-         gravação da sessão no momento exato do clique                      */
-      if (typeof window.clarity === 'function') {
-        window.clarity('event', 'whatsapp_click');
+      /* No PostHog o clique é O evento de conversão: marca a gravação da
+         sessão no instante exato e fecha o funil $pageview -> whatsapp_click.
+         `lp` e `area` já vêm do register — aqui só o que muda por botão.   */
+      if (window.posthog && typeof window.posthog.capture === 'function') {
+        window.posthog.capture('whatsapp_click', {
+          posicao: el.getAttribute('data-zap-pos') || 'corpo',
+          pagina: window.location.pathname
+        });
       }
 
       /* No GA4 o clique vira evento com os mesmos parâmetros do dataLayer.
@@ -172,7 +192,7 @@
     });
   });
 
-  /* --- 5. Mapa: carrega só quando a seção se aproxima da tela -------------
+  /* --- 7. Mapa: carrega só quando a seção se aproxima da tela -------------
      O `loading="lazy"` nativo NÃO funciona quando o src é definido por JS
      depois da página montada — o iframe fica em branco. Como a URL vem do
      config, o adiamento é feito aqui na mão. Numa LP de mídia paga com ~90%
@@ -190,7 +210,7 @@
     obsMapa.observe(frame);
   });
 
-  /* --- 6. Âncoras: marca a seção visível ---------------------------------- */
+  /* --- 8. Âncoras: marca a seção visível ---------------------------------- */
   var links = document.querySelectorAll('.ancoras a[href^="#"]');
   if (links.length && 'IntersectionObserver' in window) {
     var mapa = {};
