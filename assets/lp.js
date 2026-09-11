@@ -26,7 +26,12 @@
     masculina: { h1: 'Depilação a laser <em>masculina</em>',     detalhe: 'quero agendar a depilação masculina' },
     /* LP B */
     'clareamento-virilha': { h1: 'Clareamento de <em>virilha</em>', detalhe: 'quero agendar o clareamento de virilha' },
-    'clareamento-axila':   { h1: 'Clareamento de <em>axilas</em>',  detalhe: 'quero agendar o clareamento de axilas' }
+    'clareamento-axila':   { h1: 'Clareamento de <em>axilas</em>',  detalhe: 'quero agendar o clareamento de axilas' },
+    /* LP C — no Google quem busca já sabe o nome técnico, então a variação
+       usa o termo que a pessoa digitou. O H1 padrão (sem ?a=) vende o
+       resultado, que é o que funciona no Meta.                            */
+    ultrassom: { h1: 'Ultrassom microfocado <em>Full Face + Papada</em>', detalhe: 'quero saber do ultrassom Full Face + Papada' },
+    papada:    { h1: 'Ultrassom para <em>papada</em>',                   detalhe: 'quero saber do ultrassom para papada' }
   };
 
   /* --- 1. Contexto da página: lp + area -----------------------------------

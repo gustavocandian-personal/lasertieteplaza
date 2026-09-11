@@ -588,3 +588,40 @@ a:focus-visible, summary:focus-visible, .btn:focus-visible {
 @media (min-width: 900px) {
   .depos { grid-template-columns: repeat(3, 1fr); gap: 18px; }
 }
+
+/* --- Foto que ainda não chegou ----------------------------------------------
+   Reserva o espaço da foto com o monograma da marca, no mesmo tamanho da
+   foto final: a página fica apresentável e nada pula quando a foto entrar.
+   Para trocar, um <img> (com width, height e alt) no lugar do
+   <div class="foto-vazia">; o arquivo esperado está no data-foto do div.   */
+.foto-vazia {
+  display: grid; place-items: center;
+  width: 100%; height: 100%; min-height: 200px;
+  background: var(--tinta-fraca); color: var(--tinta-2);
+}
+.foto-vazia::before {
+  content: '& Co.';
+  font-family: var(--serif); font-weight: 600; letter-spacing: .02em;
+  font-size: clamp(2.2rem, 8vw, 3.4rem); opacity: .5;
+}
+/* Na célula grande o texto fica embaixo, sobre o degradê escuro: o
+   monograma sobe para não brigar com ele. */
+.celula-destaque .foto-vazia {
+  position: absolute; inset: 0; z-index: 0; min-height: 0;
+  align-items: start; padding-top: 14%;
+}
+
+/* --- LP C: outras áreas -----------------------------------------------------
+   Cartões compactos, sem foto e sem preço: a oferta da página é uma só, e o
+   resto é "Ver valor" no WhatsApp, como as áreas secundárias da LP A.
+   4 cartões por faixa e colunas 1 → 2 → 4: toda linha fecha sem cartão
+   sobrando. Com 3 ou 5 numa faixa, sobra um sozinho no tablet.            */
+.areas-grupo + .areas-grupo { margin-top: 30px; }
+.areas-mais { display: grid; gap: 14px; grid-template-columns: 1fr; }
+@media (min-width: 620px) { .areas-mais { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 900px) { .areas-mais { grid-template-columns: repeat(4, 1fr); } }
+.areas-mais .celula-corpo { padding: 18px 18px 16px; }
+.areas-mais .celula p { margin-bottom: 12px; }
+/* Botão menor que o CTA principal, mas com ~46px de altura: o toque segue
+   acima dos 44px recomendados. */
+.areas-mais .btn { padding: 10px 20px; font-size: .92rem; }

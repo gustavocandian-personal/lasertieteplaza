@@ -68,6 +68,21 @@ window.LASERCO = {
       prefixo: 'a partir de',
       por: '12x R$ 119,90',
       selo: '1ª sessão cortesia no combo com depilação'
+    },
+    /* LP C (ultrassom), no ar desde 10/09/2026 sem anúncio e sem link nas
+       outras páginas. ⚠️ PREÇO A CONFIRMAR COM A KIZZY — há 3 versões:
+         · arte do Meta de ago ("condição de agosto"): de R$ 5.999,90 por 10x R$ 329,99
+         · banner do lasercompany.com em 10/09:        de R$ 5.799,90 por 10x R$ 329,90
+         · soma no sistema (17/08): Full Face 4.199,90 + Papada 1.799,90 = R$ 5.999,80
+       Aqui está a arte com o "de" da soma do sistema, porque preço "de" precisa
+       existir de verdade. `selo` = de − 10 × parcela: mudou o preço, refaça a conta. */
+    ultrassom: {
+      titulo: 'Ultrassom Full Face + Papada',
+      de: 'R$ 5.999,80',
+      prefixo: '',
+      por: '10x R$ 329,99',
+      sessoes: '1 sessão de Full Face + 1 sessão de Papada',
+      selo: 'Você economiza R$ 2.699,90'
     }
   },
 
