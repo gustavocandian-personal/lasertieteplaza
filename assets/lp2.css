@@ -626,6 +626,16 @@ a:focus-visible, summary:focus-visible, .btn:focus-visible {
    acima dos 44px recomendados. */
 .areas-mais .btn { padding: 10px 20px; font-size: .92rem; }
 
+/* Foto do cartão. No celular fica numa faixa à esquerda, para o cartão
+   continuar baixo (são 8); a partir do tablet vai para cima em 16:10, como
+   as células da LP A. Reusa .celula-foto, que já traz o filtro do escuro. */
+.areas-mais .celula { flex-direction: row; }
+.areas-mais .celula-foto { flex: 0 0 112px; aspect-ratio: auto; }
+@media (min-width: 620px) {
+  .areas-mais .celula { flex-direction: column; }
+  .areas-mais .celula-foto { flex: none; aspect-ratio: 16 / 10; }
+}
+
 /* LP C: na foto da papada o aparelho fica na parte de baixo. O corte
    centralizado mostrava nariz e boca; descendo, entram queixo e aparelho. */
 #papada .celula-foto img { object-position: 50% 80%; }
