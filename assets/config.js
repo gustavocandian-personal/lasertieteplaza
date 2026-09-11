@@ -102,11 +102,16 @@ window.LASERCO = {
      Ads, ele pode ser importado como conversão da campanha.                */
   ga4Id: 'G-MHTJG3P4CH',
 
-  /* Opcional: conversão direta do Google Ads, sem GTM.
-     Preencha os dois para disparar gtag no clique do WhatsApp.              */
+  /* Conversão direta do Google Ads, sem GTM. Com os dois preenchidos, o
+     clique no WhatsApp dispara `conversion` para id/label. Ativada em
+     10/09/2026.
+     ⚠️ O mesmo clique também chega ao Ads pelo GA4 (`whatsapp_click`
+     importado, ação "LP Tiete Plaza (web) whatsapp_click"). Só UMA das duas
+     ações pode ser principal no Google Ads, senão cada conversa vira 2
+     conversões.                                                            */
   googleAds: {
-    id: '',              // ex.: 'AW-123456789'
-    conversionLabel: ''  // ex.: 'AbC-D_efGh12345'
+    id: 'AW-18382689419',
+    conversionLabel: 'kWmrCLXUxfMcEIupxr1E'
   },
 
   /* --- 5. Mensagem que já vai escrita no WhatsApp -------------------------
