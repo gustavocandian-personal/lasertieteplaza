@@ -130,18 +130,31 @@ window.LASERCO = {
   },
 
   /* --- 5. Mensagem que já vai escrita no WhatsApp -------------------------
-     Toda mensagem abre dizendo de QUAL PÁGINA o cliente veio. É assim que o
-     atendimento sabe na hora se o lead é de depilação ou de clareamento —
-     sem depender de relatório e sem ter que perguntar.
+     Pedido do Gustavo em 11/09/2026: a mensagem diz de onde a pessoa veio e
+     qual produto quer, para o atendimento saber na hora, sem perguntar.
+     O lp.js escolhe entre as duas frases:
 
-     {origem}  = a página (definida em cada HTML: "página de depilação" /
-                 "página de clareamento")
-     {detalhe} = o que o botão clicado oferece; já vem com o verbo, então
-                 funciona tanto pra "quero agendar" quanto pra "quero saber
-                 o valor"                                                    */
-  mensagemWhatsApp: 'Olá! Vim da {origem} e {detalhe}.',
+     google  = a visita veio de anúncio do Google (gclid/gbraid/wbraid/
+               gad_source ou utm_source=google na URL)
+               → "Olá! Vim do Google Ultrassom Full Face + Papada."
+     pagina  = qualquer outra origem (Instagram, link direto, teste), ou
+               botão sem produto
+               → "Olá! Vim da página do Ultrassom."
+
+     {produto} = data-zap-produto do botão; nos botões gerais, o produto do
+                 ?a= ou o data-produto do <body>
+     {pagina}  = data-origem do <body>
+     A lista de todas as mensagens, botão por botão, está na
+     base-conhecimento-servicos-laser-co.md §10. Mudou algo aqui ou num
+     botão: atualizar lá também, porque a Laura e o Gerente de Tráfego Pago
+     leem de lá.                                                            */
+  mensagemWhatsApp: {
+    google: 'Olá! Vim do Google {produto}.',
+    pagina: 'Olá! Vim da {pagina}.'
+  },
 
   /* Anexa também a origem de mídia (gclid/utm) no fim da mensagem.
-     true = atendente vê que veio de anúncio. Deixa a mensagem menos limpa.  */
+     true = atendente vê que veio de anúncio. Deixa a mensagem menos limpa.
+     Desde 11/09 a frase "Vim do Google" já faz esse papel.                  */
   incluirOrigemNaMensagem: false
 };

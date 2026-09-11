@@ -15,23 +15,25 @@
 
   /* --- Variações de H1 por grupo de anúncio -------------------------------
      Uso: /depilacao-laser.html?a=axilas
-     Cada chave vira H1 + mensagem do WhatsApp própria, mantendo a oferta de
-     virilha no herói (é o que vende).                                       */
+     Cada chave troca o H1 e o produto que vai na mensagem do WhatsApp dos
+     botões gerais (topo, herói, barra fixa, CTA final), mantendo a oferta
+     de virilha no herói (é o que vende). A lista completa de mensagens está
+     na base-conhecimento-servicos-laser-co.md §10.                          */
   var VARIACOES = {
     /* LP A */
-    virilha:   { h1: 'Depilação a laser de <em>virilha</em>',    detalhe: 'quero agendar a depilação de virilha' },
-    axilas:    { h1: 'Depilação a laser de <em>axilas</em>',     detalhe: 'quero agendar a depilação de axilas' },
-    pernas:    { h1: 'Depilação a laser de <em>pernas</em>',     detalhe: 'quero agendar a depilação de pernas' },
-    corpo:     { h1: 'Depilação a laser <em>corpo inteiro</em>', detalhe: 'quero agendar o pacote de corpo inteiro' },
-    masculina: { h1: 'Depilação a laser <em>masculina</em>',     detalhe: 'quero agendar a depilação masculina' },
+    virilha:   { h1: 'Depilação a laser de <em>virilha</em>',    produto: 'Depilação a laser Virilha completa + perianal' },
+    axilas:    { h1: 'Depilação a laser de <em>axilas</em>',     produto: 'Depilação a laser Axilas' },
+    pernas:    { h1: 'Depilação a laser de <em>pernas</em>',     produto: 'Depilação a laser Pernas' },
+    corpo:     { h1: 'Depilação a laser <em>corpo inteiro</em>', produto: 'Depilação a laser Corpo inteiro' },
+    masculina: { h1: 'Depilação a laser <em>masculina</em>',     produto: 'Depilação a laser Masculina' },
     /* LP B */
-    'clareamento-virilha': { h1: 'Clareamento de <em>virilha</em>', detalhe: 'quero agendar o clareamento de virilha' },
-    'clareamento-axila':   { h1: 'Clareamento de <em>axilas</em>',  detalhe: 'quero agendar o clareamento de axilas' },
+    'clareamento-virilha': { h1: 'Clareamento de <em>virilha</em>', produto: 'Clareamento Virilha' },
+    'clareamento-axila':   { h1: 'Clareamento de <em>axilas</em>',  produto: 'Clareamento Axilas' },
     /* LP C — no Google quem busca já sabe o nome técnico, então a variação
        usa o termo que a pessoa digitou. O H1 padrão (sem ?a=) vende o
        resultado, que é o que funciona no Meta.                            */
-    ultrassom: { h1: 'Ultrassom microfocado <em>Full Face + Papada</em>', detalhe: 'quero saber do ultrassom Full Face + Papada' },
-    papada:    { h1: 'Ultrassom para <em>papada</em>',                   detalhe: 'quero saber do ultrassom para papada' }
+    ultrassom: { h1: 'Ultrassom microfocado <em>Full Face + Papada</em>', produto: 'Ultrassom Full Face + Papada' },
+    papada:    { h1: 'Ultrassom para <em>papada</em>',                   produto: 'Ultrassom Papada' }
   };
 
   /* --- 1. Contexto da página: lp + area -----------------------------------
@@ -49,11 +51,26 @@
 
   var lp = document.body.getAttribute('data-lp') || 'a';
 
-  /* De onde o cliente veio — abre TODA mensagem, inclusive as dos botões
-     de seção. É o que diz ao atendimento se o lead é de depilação ou de
-     clareamento antes mesmo de ele responder.                              */
-  var origemPagina  = document.body.getAttribute('data-origem') || 'página do site';
-  var detalhePadrao = document.body.getAttribute('data-detalhe') || 'quero agendar uma avaliação';
+  /* O que a mensagem do WhatsApp diz — é o que conta ao atendimento, antes
+     de a pessoa responder, de onde ela veio e o que quer.
+     {pagina}  = data-origem do <body> ("página do Ultrassom")
+     {produto} = data-zap-produto do botão; nos botões gerais, o produto do
+                 ?a= ou, sem ele, o data-produto do <body>                  */
+  var paginaNome    = document.body.getAttribute('data-origem') || 'página do site';
+  var produtoPadrao = document.body.getAttribute('data-produto') || '';
+
+  /* Veio de anúncio do Google? Só aí a mensagem diz "Vim do Google": o
+     Google Ads põe gclid/gbraid/wbraid/gad_source na URL (auto-tagging), e
+     utm_source=google cobre quem marcar a URL na mão. Fica guardado na
+     sessão: quem chegou pelo anúncio e passou para outra LP pelo rodapé
+     continua sendo "do Google". Instagram, link direto e teste da equipe
+     caem no texto da página.                                               */
+  var doGoogle = ['gclid', 'gbraid', 'wbraid', 'gad_source'].some(function (k) { return params.has(k); })
+    || /^google/i.test(params.get('utm_source') || '');
+  try {
+    if (doGoogle) sessionStorage.setItem('lc_fonte', 'google');
+    else doGoogle = sessionStorage.getItem('lc_fonte') === 'google';
+  } catch (e) { /* navegador sem sessionStorage: vale só a URL */ }
 
   /* --- 2. GTM ------------------------------------------------------------ */
   window.dataLayer = window.dataLayer || [];
@@ -139,14 +156,16 @@
   }
 
   function montaLink(el) {
-    /* Cada botão só define o {detalhe}; a origem entra sempre, pelo template.
-       Assim não existe botão que chegue no WhatsApp sem dizer de onde veio. */
-    var detalhe = el.getAttribute('data-zap-detalhe')
-      || (variacao ? variacao.detalhe : detalhePadrao);
+    /* Cada botão só define o produto; a frase vem do config. Do Google:
+       "Olá! Vim do Google {produto}." Qualquer outra origem, ou botão sem
+       produto: "Olá! Vim da {pagina}."                                     */
+    var produto = el.getAttribute('data-zap-produto')
+      || (variacao ? variacao.produto : produtoPadrao);
+    var M = C.mensagemWhatsApp || {};
 
-    var texto = (C.mensagemWhatsApp || 'Olá! Vim da {origem} e {detalhe}.')
-      .replace('{origem}', origemPagina)
-      .replace('{detalhe}', detalhe);
+    var texto = (doGoogle && produto)
+      ? (M.google || 'Olá! Vim do Google {produto}.').replace('{produto}', produto)
+      : (M.pagina || 'Olá! Vim da {pagina}.').replace('{pagina}', paginaNome);
 
     var numero = (C.whatsapp || '').replace(/\D/g, '');
     el.href = 'https://wa.me/' + numero + '?text=' + encodeURIComponent(texto + origem);
