@@ -625,3 +625,7 @@ a:focus-visible, summary:focus-visible, .btn:focus-visible {
 /* Botão menor que o CTA principal, mas com ~46px de altura: o toque segue
    acima dos 44px recomendados. */
 .areas-mais .btn { padding: 10px 20px; font-size: .92rem; }
+
+/* LP C: na foto da papada o aparelho fica na parte de baixo. O corte
+   centralizado mostrava nariz e boca; descendo, entram queixo e aparelho. */
+#papada .celula-foto img { object-position: 50% 80%; }
