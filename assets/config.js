@@ -13,7 +13,7 @@ window.LASERCO = {
   whatsapp: '5511999615300',
 
   /* --- 2. Unidade ---------------------------------------------------------
-     ⚠️ REVISAR — a loja do Tietê Plaza sai até 31/08/2026.
+     A loja fica no Tietê Plaza pelo menos até dez/2026 (decisão de 11/08).
      Se mudar de endereço, troque aqui e nada mais quebra.                   */
   unidade: {
     nome: 'Tietê Plaza Shopping',
@@ -21,12 +21,21 @@ window.LASERCO = {
     referencia: 'Piso térreo · estacionamento no shopping',
     horario: 'Seg a sáb, 10h às 22h · Dom, 14h às 20h',
 
-    /* Botão "Ver no mapa" — abre o Google Maps / app de mapas do celular */
-    mapsUrl: 'https://www.google.com/maps/place/Tietê+Plaza+Shopping/@-23.5065372,-46.7184784,17z',
+    /* Botão "Ver no mapa": abre o perfil da CLÍNICA no Google Maps (ou no
+       app de mapas do celular). O CID é o identificador fixo do perfil.
+       Até 10/09/2026 apontava para o perfil do shopping, e quem clicava
+       nunca via a nota da clínica.                                        */
+    mapsUrl: 'https://maps.google.com/?cid=9865193678951033634',
 
-    /* Mapa embutido na seção "Onde estamos".
-       Carrega em lazy: não pesa no tempo de abertura da página.            */
-    mapsEmbed: 'https://www.google.com/maps?q=Tietê+Plaza+Shopping,+Av.+Raimundo+Pereira+de+Magalhães,+1465,+São+Paulo&z=16&hl=pt-BR&output=embed'
+    /* Mapa embutido na seção "Onde estamos". Carrega em lazy: não pesa no
+       tempo de abertura da página.
+       A busca pelo nome EXATO do perfil ("Laser & Company - Tietê Plaza")
+       é o que faz o mapa abrir com o cartão da clínica (nota e rota). Testado
+       em 10/09/2026: por CID, por ftid e pelo nome + endereço o mapa abre sem
+       cartão nenhum; o endereço antigo mostrava o cartão do shopping, com a
+       nota DELE (4,5 e 56 mil avaliações). Se o perfil mudar de nome no
+       Google, trocar aqui também.                                         */
+    mapsEmbed: 'https://www.google.com/maps?q=Laser+%26+Company+-+Tiet%C3%AA+Plaza&hl=pt-BR&z=17&output=embed'
   },
 
   /* --- 3. Ofertas ---------------------------------------------------------
