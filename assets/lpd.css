@@ -1,0 +1,318 @@
+/* ============================================================================
+   Laser & Co  ·  LP D (desafiante)  ·  regiao do heroi
+   ----------------------------------------------------------------------------
+   Carrega DEPOIS do lp2.css e so mexe no topo da pagina. Da faixa de ancoras
+   para baixo (areas, ciclo, passo a passo, avaliacoes, FAQ, local, CTA final,
+   rodape) e byte a byte a mesma coisa da LP A — e de proposito: o teste
+   compara o topo, nao a pagina inteira.
+
+   De onde veio cada decisao: 2026-09-13_depara-lp-desafiante-flowmind.md
+
+   O QUE FOI IMPORTADO DO SPEC DO FLOWMIND
+   1. Heroi de fundo    foto sangrando na tela inteira, conteudo sobre scrim
+   2. Superficie de vidro   translucido + blur + borda dupla (double-border-capsule)
+   3. Contraste tipografico  a palavra em destaque do H1 vira serif italico
+   4. Faixa de atributos abaixo do CTA (la eram 3 beneficios, aqui 4 objecoes)
+
+   O QUE NAO VEIO
+   Prova social inventada, captura de e-mail, menu hamburguer, onda letra a
+   letra, `select-none`, paleta preta, assets de CDN de terceiro.
+
+   ⚠️ CORES LITERAIS SAO PROPOSITAIS AQUI DENTRO.
+   O resto da pagina usa tokens que invertem no modo escuro (--tinta vira
+   claro). Um scrim sobre foto nao pode inverter: a foto continua a mesma e o
+   texto em cima dela continua claro nos dois modos. Entao dentro do heroi as
+   cores sao fixas. Fora dele, tudo segue token.
+   ========================================================================== */
+
+body[data-lp="d"] {
+  /* Escala do scrim. #2A100F e o --tinta puxado para o mais escuro, para
+     sustentar texto creme com folga de contraste sobre a foto. */
+  --scrim:       rgba(42, 16, 15, .62);
+  --scrim-forte: rgba(26, 9, 8, .86);
+  --sobre:       #FAF8F5;                 /* texto principal sobre o scrim */
+  --sobre-2:     rgba(250, 248, 245, .84);/* apoio  */
+  --sobre-3:     rgba(250, 248, 245, .66);/* legenda */
+  --vidro:       rgba(250, 248, 245, .10);
+  --vidro-linha: rgba(250, 248, 245, .20);
+  --vidro-eco:   rgba(250, 248, 245, .09); /* a 2a borda da capsula */
+}
+
+/* --- A faixa do heroi ------------------------------------------------------
+   Sangra na largura toda. A ALTURA E DITADA PELO CONTEUDO, nao por 100vh:
+   o spec original empurrava o conteudo com pb-[35vh] e foi exatamente assim
+   que o botao nascia abaixo da dobra na pagina antiga.                      */
+.heroi-d {
+  position: relative;
+  isolation: isolate;
+  background: #1A0908;                    /* cor de espera ate a foto chegar */
+}
+
+.heroi-d-fundo {
+  position: absolute; inset: 0; z-index: -2;
+  overflow: hidden;
+}
+.heroi-d-fundo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: 55% 58%;               /* mantem o disparo do laser no quadro */
+}
+
+/* Scrim em duas camadas: um vu geral para o contraste do texto, e um
+   degrade vertical que fecha o topo (onde entra o cabecalho) e o pe (onde o
+   heroi encontra a faixa de ancoras).                                       */
+.heroi-d-fundo::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, var(--scrim-forte) 0%, transparent 26%, transparent 52%, var(--scrim-forte) 100%),
+    var(--scrim);
+}
+
+@media (prefers-color-scheme: dark) {
+  /* A pagina inteira ja esta escura: o heroi so precisa nao brilhar. */
+  .heroi-d-fundo img { filter: brightness(.86) contrast(1.02); }
+}
+
+/* --- Cabecalho, agora por cima da foto ------------------------------------ */
+body[data-lp="d"] .header {
+  background: transparent;
+  border-bottom: 0;
+  position: relative; z-index: 2;
+}
+body[data-lp="d"] .logo-nome { color: var(--sobre); }
+body[data-lp="d"] .logo-sub  { color: var(--sobre-3); }
+
+/* --- Conteudo -------------------------------------------------------------- */
+.heroi-d-corpo {
+  position: relative; z-index: 1;
+  padding-top: 22px;
+  /* +--anc: a barra de ancoras sobe para dentro do heroi por margem
+     negativa, entao o conteudo precisa dessa folga para nao ficar embaixo
+     dela. O sobrando vira o respiro entre os chips e a barra.             */
+  padding-bottom: calc(30px + var(--anc));
+}
+
+/* Local e nota dividem uma linha so: no celular cada bloco a mais aqui em
+   cima empurra o botao para fora da primeira tela. */
+.heroi-d-topo {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px;
+  margin-bottom: 16px;
+}
+.heroi-d-topo .heroi-d-local { margin: 0; }
+
+/* Prova social real no lugar do "7.943+ people already joined" do spec:
+   a nota da unidade, com link para o perfil. Numero conferivel. */
+.selo-nota {
+  display: inline-flex; align-items: center; gap: 8px;
+  align-self: flex-start;   /* senao o flex do heroi estica a pilula inteira */
+  margin: 0;
+  padding: 6px 14px 6px 11px;
+  border-radius: var(--pill);
+  background: var(--vidro);
+  border: 1px solid var(--vidro-linha);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  font-size: .8rem; color: var(--sobre-2);
+  text-decoration: none;
+}
+.selo-nota strong { color: var(--sobre); font-weight: 700; }
+.selo-nota .estrela { color: #F4C14E; font-size: .9rem; line-height: 1; }
+.selo-nota:hover { background: rgba(250,248,245,.16); }
+
+.heroi-d-local {
+  font-size: .72rem; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--sobre-3);
+  margin: 0 0 10px;
+}
+
+.heroi-d h1 {
+  color: var(--sobre);
+  max-width: 15ch;
+  margin-bottom: 16px;
+  text-wrap: balance;
+}
+/* O unico truque tipografico que veio inteiro do Flowmind: a palavra que
+   carrega a manchete sai da sans e vira serif italico. Na LP A esse <em> ja
+   existe no HTML e e so italico da propria Inter.                          */
+.heroi-d h1 em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--sobre);
+  font-size: 1.16em;
+  letter-spacing: -.012em;
+}
+
+/* --- Cartao de oferta em vidro -------------------------------------------- */
+.heroi-d .oferta {
+  background: var(--vidro);
+  border: 1px solid var(--vidro-linha);
+  outline: 1px solid var(--vidro-eco);    /* a borda dupla do spec */
+  outline-offset: 3px;
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  box-shadow: none;
+  margin: 0 3px 18px;                     /* 3px = a folga da 2a borda */
+}
+.heroi-d .oferta-titulo { color: var(--sobre); }
+.heroi-d .oferta-de     { color: var(--sobre-3); }
+.heroi-d .oferta-por    { color: var(--sobre); font-size: 2.15rem; }
+.heroi-d .oferta-por small,
+.heroi-d .oferta-nota   { color: var(--sobre-2); }
+
+/* --- Faixa de atributos ---------------------------------------------------
+   Onde o spec poe "Focus better / Get more done / Protect your time", aqui
+   entram as 4 objecoes de compra: custo, risco, deslocamento e horario.
+   Sao os mesmos 4 itens que na LP A moram na faixa .provas, logo abaixo do
+   heroi. Aqui eles sobem para dentro dele, depois do botao.                */
+.chips-d {
+  list-style: none; margin: 24px 0 0; padding: 0;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px;
+}
+.chips-d li {
+  display: grid; grid-template-columns: 17px 1fr; gap: 9px;
+  align-items: start;
+  font-size: .84rem; line-height: 1.32; color: var(--sobre-2);
+}
+.chips-d svg { width: 17px; height: 17px; margin-top: 1px; color: #6EE7A8; }
+.chips-d strong {
+  display: block; font-weight: 700; color: var(--sobre); font-size: .89rem;
+}
+
+/* --- Faixa de ancoras: a pilula de vidro do spec ---------------------------
+   Continua sendo a MESMA nav (o lp.js observa `.ancoras a[href^="#"]` para
+   marcar a secao visivel). O que muda sao dois estados:
+
+     sobre o heroi   vidro fosco sobre a foto, itens em creme
+     grudada no topo solida, porque dali em diante ela vive sobre o conteudo
+                     claro da pagina, onde vidro deixa de ser legivel
+
+   Quem troca a classe `grudada` e o lpd.js. O truque para saber que grudou
+   e o `top: -1px` abaixo: uma vez presa, 1px da barra sai da tela e a razao
+   de interseccao cai abaixo de 1. Sem sentinela e sem numero magico.
+
+   A barra sobe --anc para dentro do heroi (margem negativa), senao ela
+   nasceria embaixo dele, sobre o creme, e o vidro nao teria foto atras.   */
+body[data-lp="d"] {
+  --anc: 59px;   /* altura medida da barra. Mudou o padding dos itens, remedir:
+                    se ficar menor que a altura real, a barra passa do pe do
+                    heroi e sobra uma tira dela sobre o creme da pagina.   */
+}
+body[data-lp="d"] .ancoras {
+  top: -1px;
+  margin-top: calc(var(--anc) * -1);
+  background: rgba(26, 9, 8, .30);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(250, 248, 245, .14);
+  transition: background .22s ease, border-color .22s ease;
+}
+body[data-lp="d"] .ancoras ul { padding-block: 9px; gap: 4px; }
+body[data-lp="d"] .ancoras a {
+  padding: 8px 14px;
+  border-radius: var(--pill);
+  border-bottom: 0;
+  border: 1px solid transparent;
+  color: rgba(250, 248, 245, .82);
+}
+body[data-lp="d"] .ancoras a.ativo {
+  background: rgba(250, 248, 245, .92);
+  color: #35100F;                        /* literal: o fundo aqui e a foto */
+  border-bottom-color: transparent;
+}
+body[data-lp="d"] .ancoras::after {
+  background: linear-gradient(to right, rgba(26, 9, 8, 0), rgba(26, 9, 8, .55));
+}
+
+/* Presa no topo: volta a ser superficie normal da pagina, com token, porque
+   dali em diante ela precisa funcionar nos dois modos de cor.             */
+body[data-lp="d"] .ancoras.grudada {
+  background: var(--papel);
+  border-bottom-color: var(--linha);
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+body[data-lp="d"] .ancoras.grudada a       { color: var(--texto-2); }
+body[data-lp="d"] .ancoras.grudada a.ativo { background: var(--tinta); color: var(--creme); }
+body[data-lp="d"] .ancoras.grudada::after {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--papel));
+}
+
+/* --- Entrada ---------------------------------------------------------------
+   O spec gasta 1,8s numa onda letra a letra que so acontece no hover. Aqui
+   sao 260ms de subida, uma vez, em 4 blocos. O estado em repouso e VISIVEL:
+   a opacidade zero mora no keyframe, nunca na regra base. Assim, se a
+   animacao nao rodar (o lp2.css desliga tudo em prefers-reduced-motion), o
+   heroi aparece inteiro em vez de sumir.                                    */
+@keyframes sobe-d {
+  from { opacity: 0; transform: translateY(9px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes desce-d {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: none; }
+}
+/* A onda do spec: a letra entra de baixo e da esquerda. La sao 1,8s e so
+   acontece no hover; aqui sao 0,5s por letra NA ENTRADA, que e o unico
+   momento em que ~90% do trafego (celular, sem hover) veria o efeito.
+   O atraso por letra vem inline, do lpd.js.                               */
+@keyframes onda-d {
+  from { opacity: 0; transform: translate(-.22em, .55em); }
+  to   { opacity: 1; transform: none; }
+}
+
+.heroi-d-corpo > *,
+.heroi-d-corpo > .oferta {
+  animation: sobe-d .26s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+/* Cabecalho e barra de ancoras descem, como a nav do spec (la, y:-30). */
+body[data-lp="d"] .header { animation: desce-d .34s cubic-bezier(.16, 1, .3, 1) both; }
+body[data-lp="d"] .ancoras { animation: desce-d .34s cubic-bezier(.16, 1, .3, 1) .28s both; }
+
+/* Com a onda ligada, o H1 NAO entra mais como bloco: senao a manchete
+   inteira apareceria de uma vez e engoliria o efeito letra a letra.
+   A classe `ondulado` so existe quando o lpd.js quebrou o H1 em letras.   */
+.heroi-d-corpo > .ondulado { animation: none; }
+/* A palavra inteira e um bloco que nao quebra: sem isso, cada letra em
+   inline-block vira ponto de quebra e a manchete parte no meio da palavra. */
+.heroi-d h1 .pal { display: inline-block; white-space: nowrap; }
+.heroi-d h1 .ltr {
+  display: inline-block;
+  animation: onda-d .5s cubic-bezier(.16, 1, .3, 1) both;
+}
+.heroi-d-corpo > :nth-child(1) { animation-delay: .02s; }  /* local + nota  */
+.heroi-d-corpo > :nth-child(2) { animation-delay: .08s; }  /* manchete      */
+.heroi-d-corpo > :nth-child(3) { animation-delay: .14s; }  /* oferta        */
+.heroi-d-corpo > :nth-child(4) { animation-delay: .19s; }  /* botao         */
+.heroi-d-corpo > :nth-child(5) { animation-delay: .24s; }  /* chips         */
+
+/* --- Tablet para cima ------------------------------------------------------ */
+@media (min-width: 700px) {
+  .heroi-d-fundo img { object-position: center 56%; }
+
+  /* Do tablet para cima o texto ocupa so a metade esquerda, entao o scrim
+     deixa de ser uniforme: fecha do lado do texto e abre do lado da foto,
+     que e onde o disparo do laser aparece. */
+  .heroi-d-fundo::after {
+    background:
+      linear-gradient(to right, var(--scrim-forte) 0%, rgba(26, 9, 8, .58) 46%, rgba(26, 9, 8, .28) 100%),
+      linear-gradient(to bottom, rgba(26, 9, 8, .55) 0%, transparent 30%, transparent 66%, rgba(26, 9, 8, .6) 100%);
+  }
+  .heroi-d-corpo {
+    padding-top: 54px;
+    padding-bottom: calc(62px + var(--anc));
+    min-height: 460px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .heroi-d-corpo > * { max-width: 560px; }
+  .heroi-d h1 { font-size: 3rem; max-width: 13ch; }
+  .heroi-d .oferta-por { font-size: 2.4rem; }
+  .heroi-d .btn-zap-bloco { width: auto; align-self: flex-start; }
+  .chips-d { grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 100%; }
+  .chips-d li { font-size: .8rem; }
+}
+
+@media (min-width: 1000px) {
+  .heroi-d-corpo { min-height: 540px; padding-block: 68px calc(76px + var(--anc)); }
+  .heroi-d h1 { font-size: 3.4rem; }
+  .heroi-d-corpo > * { max-width: 600px; }
+  .chips-d { max-width: 860px; }
+}
